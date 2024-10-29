@@ -1,5 +1,7 @@
 package com.devkduck.letterfromthesea.global.auth;
 
+import com.devkduck.letterfromthesea.member.domain.Member;
+import com.devkduck.letterfromthesea.member.mapper.MemberMapper;
 import io.netty.handler.codec.http.HttpHeaderValues;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -19,10 +21,11 @@ public class KakaoService {
     private String clientId;
     private final String KAUTH_TOKEN_URL_HOST;
     private final String KAUTH_USER_URL_HOST;
-
+    private MemberMapper memberMapper;
     @Autowired
-    public KakaoService(@Value("${kakao.client_id}") String clientId) {
+    public KakaoService(@Value("${kakao.client_id}") String clientId, MemberMapper memberMapper) {
         this.clientId = clientId;
+        this.memberMapper = memberMapper;
         KAUTH_TOKEN_URL_HOST ="https://kauth.kakao.com";
         KAUTH_USER_URL_HOST = "https://kapi.kakao.com";
     }
@@ -50,7 +53,25 @@ public class KakaoService {
         return userInfo;
     }
 
-    public String getAccessTokenFromKakao(String code) {
+
+    public void saveOrUpdateMember(KakaoUserInfoResponseDto userInfo, String accessToken, String refreshToken) {
+        String kakaoId = String.valueOf(userInfo.getId());
+        Member member;
+        member = memberMapper.findByKakaoId(kakaoId);
+
+        if (member == null) {
+            member = new Member();
+            member.setKakaoId(kakaoId);
+            member.setNickname(userInfo.getKakaoAccount().getProfile().getNickName());
+            member.setProfileImageUrl(userInfo.getKakaoAccount().getProfile().getProfileImageUrl());
+            member.setAccessToken(accessToken);
+            member.setRefreshToken(refreshToken);
+            memberMapper.insertMember(member);
+        } else {
+            memberMapper.updateTokens(kakaoId, accessToken, refreshToken);
+        }
+    }
+    public KakaoTokenResponseDto getAccessTokenFromKakao(String code) {
 
         KakaoTokenResponseDto kakaoTokenResponseDto = WebClient.create(KAUTH_TOKEN_URL_HOST).post()
                 .uri(uriBuilder -> uriBuilder
@@ -75,6 +96,6 @@ public class KakaoService {
         log.info(" [Kakao Service] Id Token ------> {}", kakaoTokenResponseDto.getIdToken());
         log.info(" [Kakao Service] Scope ------> {}", kakaoTokenResponseDto.getScope());
 
-        return kakaoTokenResponseDto.getAccessToken();
+        return kakaoTokenResponseDto;
     }
 }

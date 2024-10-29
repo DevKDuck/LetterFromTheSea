@@ -23,8 +23,11 @@ public class KakaoLoginController {
     @GetMapping("/callback")
     public RedirectView callback(@RequestParam("code") String code ) throws IOException {
 
-        String accessToken = kakaoService.getAccessTokenFromKakao(code);
+        KakaoTokenResponseDto responseDto = kakaoService.getAccessTokenFromKakao(code);
+        String accessToken = responseDto.accessToken;
+        String refreshToken = responseDto.refreshToken;
         KakaoUserInfoResponseDto userInfo = kakaoService.getUserInfo(accessToken);
+        kakaoService.saveOrUpdateMember(userInfo, accessToken, refreshToken);
         log.info(userInfo.toString());
         return new RedirectView("/index.html");
     }
