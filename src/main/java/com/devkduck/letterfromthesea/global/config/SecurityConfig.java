@@ -1,6 +1,7 @@
 package com.devkduck.letterfromthesea.global.config;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -19,13 +20,17 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         return http.authorizeHttpRequests(authorizeHttpRequestsCustomizer -> authorizeHttpRequestsCustomizer
-//                        .requestMatchers("/css/**", "/js/**", "/img/**").permitAll()
-//                        .requestMatchers("/", "/members/**", "/item/**", "/images/**").permitAll()
+                        .requestMatchers("/login/page").permitAll()
+                        .requestMatchers("/images/**").permitAll()
+                        .requestMatchers("/callback").permitAll()
+                        .requestMatchers("/index.html").permitAll()
+
+
 //                        .requestMatchers("/admin/**").hasRole("ADMIN")
                         .anyRequest()
                         .authenticated()
                 ).formLogin(formLoginCustomizer -> formLoginCustomizer
-//                        .loginPage("/members/login")
+                        .loginPage("/login/page")
                         .defaultSuccessUrl("/")
 //                        .usernameParameter("email")
 //                        .failureUrl("/members/login/error")
