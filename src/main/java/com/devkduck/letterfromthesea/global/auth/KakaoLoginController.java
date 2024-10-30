@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.view.RedirectView;
 
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 @Slf4j
 @RestController
@@ -28,7 +30,11 @@ public class KakaoLoginController {
         String refreshToken = responseDto.refreshToken;
         KakaoUserInfoResponseDto userInfo = kakaoService.getUserInfo(accessToken);
         kakaoService.saveOrUpdateMember(userInfo, accessToken, refreshToken);
-        log.info(userInfo.toString());
-        return new RedirectView("/index.html");
+
+        RedirectView redirectView = new RedirectView("/index.html");
+        redirectView.addStaticAttribute("accessToken", accessToken);
+        redirectView.addStaticAttribute("refreshToken", refreshToken);
+
+        return redirectView;
     }
 }

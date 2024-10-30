@@ -22,6 +22,7 @@ public class KakaoService {
     private final String KAUTH_TOKEN_URL_HOST;
     private final String KAUTH_USER_URL_HOST;
     private MemberMapper memberMapper;
+
     @Autowired
     public KakaoService(@Value("${kakao.client_id}") String clientId, MemberMapper memberMapper) {
         this.clientId = clientId;
@@ -29,6 +30,7 @@ public class KakaoService {
         KAUTH_TOKEN_URL_HOST ="https://kauth.kakao.com";
         KAUTH_USER_URL_HOST = "https://kapi.kakao.com";
     }
+
     public KakaoUserInfoResponseDto getUserInfo(String accessToken) {
 
         KakaoUserInfoResponseDto userInfo = WebClient.create(KAUTH_USER_URL_HOST)
@@ -89,7 +91,8 @@ public class KakaoService {
                 .bodyToMono(KakaoTokenResponseDto.class)
                 .block();
 
-
+        log.info("AccessToekn_expiresIn: {}", kakaoTokenResponseDto.getExpiresIn());
+        log.info("refreshToken_expiresIn: {}", kakaoTokenResponseDto.getRefreshTokenExpiresIn());
         log.info(" [Kakao Service] Access Token ------> {}", kakaoTokenResponseDto.getAccessToken());
         log.info(" [Kakao Service] Refresh Token ------> {}", kakaoTokenResponseDto.getRefreshToken());
         //제공 조건: OpenID Connect가 활성화 된 앱의 토큰 발급 요청인 경우 또는 scope에 openid를 포함한 추가 항목 동의 받기 요청을 거친 토큰 발급 요청인 경우
