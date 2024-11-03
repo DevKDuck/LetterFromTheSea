@@ -8,7 +8,7 @@
         VALUES (#{kakaoId}, #{nickname}, #{profileImageUrl}, #{accessToken}, #{refreshToken})
     </insert>
 
-    <select id="findByKakaoId" resultType="Member">
+    <select id="findByKakaoId" resultType="com.devkduck.letterfromthesea.member.domain.Member">
         SELECT * FROM member WHERE kakao_id = #{kakaoId}
     </select>
 
