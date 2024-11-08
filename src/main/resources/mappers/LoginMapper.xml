@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.devkduck.letterfromthesea.user.mapper.LoginMapper">
+    <select id="findByUsername" resultType="com.devkduck.letterfromthesea.user.domain.User">
+        SELECT * FROM user WHERE username = #{username}
+    </select>
+
+    <insert id="save" parameterType="com.devkduck.letterfromthesea.user.domain.Userdto">
+        INSERT INTO user (username, password, name, email, phone_number, roles)
+        VALUES (#{username}, #{password}, #{name}, #{email}, #{phoneNumber}, #{roles});
+    </insert>
+
+
+
+</mapper>

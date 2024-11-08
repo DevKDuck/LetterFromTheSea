@@ -1,4 +1,4 @@
-package com.devkduck.letterfromthesea.member.domain;
+package com.devkduck.letterfromthesea.user.domain;
 
 import lombok.Data;
 

@@ -1,10 +1,11 @@
 package com.devkduck.letterfromthesea;
 
 //import org.mybatis.spring.annotation.MapperScan;
+import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
-
+@MapperScan("com.devkduck.letterfromthesea.user.mapper")
 @SpringBootApplication
 public class LetterfromtheseaApplication {
 
