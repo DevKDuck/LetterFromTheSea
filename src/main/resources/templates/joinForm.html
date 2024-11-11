@@ -2,20 +2,43 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
-    <h1>회원가입</h1>
-    <hr/>
+    <title>회원가입</title>
 </head>
 <body>
-<form action="/join" method="POST">
-    아이디: <input type="text" name="username"> <br/>
-    비밀번호: <input type="password" name="password">  <br/>
-    비밀번호 확인: <input type="password" name="confirm">  <br/>
-    이름: <input type="text" name="name">  <br/>
-    이메일: <input type="email" name="email">  <br/>
-    핸드폰 번호: <input type="text" name="phoneNumber">  <br/>
-    <button> 회원가입</button>
+<h1>회원가입</h1>
+<hr/>
+<form id="joinForm">
+    아이디: <input type="text" id="username" name="username"> <br/>
+    비밀번호: <input type="password" id="password" name="password">  <br/>
+    비밀번호 확인: <input type="password" id="confirm" name="confirm">  <br/>
+    이름: <input type="text" id="name" name="name">  <br/>
+    이메일: <input type="email" id="email" name="email">  <br/>
+    핸드폰 번호: <input type="text" id="phoneNumber" name="phoneNumber">  <br/>
+    <button type="button" onclick="submitForm(event)">회원가입</button>
 </form>
 
+<script>
+    function submitForm(event) {
+        event.preventDefault();
+        const data = {
+            username: document.getElementById('username').value,
+            password: document.getElementById('password').value,
+            name: document.getElementById('name').value,
+            email: document.getElementById('email').value,
+            phoneNumber: document.getElementById('phoneNumber').value
+        };
+
+        fetch('/api/user/auth/join', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(data)
+        })
+            .then(response => response.json())
+            .then(data => console.log(data))
+            .catch(err => console.error(err));
+    }
+</script>
 </body>
 </html>

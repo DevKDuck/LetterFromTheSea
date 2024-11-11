@@ -1,7 +1,6 @@
 package com.devkduck.letterfromthesea.user.auth;
 
 import com.devkduck.letterfromthesea.user.domain.User;
-import com.devkduck.letterfromthesea.user.domain.Userdto;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -10,9 +9,9 @@ import java.util.Collection;
 
 
 public class PrincipalDetails implements UserDetails {
-    private Userdto user;
+    private User user;
 
-    public PrincipalDetails(Userdto user){
+    public PrincipalDetails(User user){
         this.user = user;
     }
 
@@ -22,7 +21,7 @@ public class PrincipalDetails implements UserDetails {
         collect.add(new GrantedAuthority() {
             @Override
             public String getAuthority() {
-                return user.getRoles();
+                return user.getRole().getKey();
             }
         });
         return collect;
